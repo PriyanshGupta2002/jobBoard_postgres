@@ -6,9 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 import { SessionHydrator } from "@/components/session-hydrater";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import AppSidebarInset from "@/components/sidebar/app-sidebar-inset";
+
 import { getCurrentUserWithProfile } from "@/lib/currentUser";
 
 const fontSans = Plus_Jakarta_Sans({
@@ -50,21 +48,9 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider
-            style={
-              {
-                "--sidebar-width": "16rem",
-                "--sidebar-width-mobile": "16rem",
-              } as React.CSSProperties
-            }
-          >
-            <AppSidebar />
-            <SessionHydrator session={userSession} />
-            <main>
-              <AppSidebarInset />
-              <div className="p-2"> {children} </div>
-            </main>
-          </SidebarProvider>
+          <SessionHydrator session={userSession} />
+          <main>{children}</main>
+
           <Toaster />
         </ThemeProvider>
       </body>

@@ -1,6 +1,7 @@
 import {
   boolean,
   check,
+  customType,
   date,
   index,
   integer,
@@ -18,6 +19,11 @@ import { relations, sql } from "drizzle-orm";
 
 export const roleEnum = pgEnum("role", ["org", "person"]);
 
+const tsvector = customType<{ data: string }>({
+  dataType() {
+    return "tsvector";
+  },
+});
 export const timestamps = {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
@@ -108,9 +114,9 @@ export const jobs = pgTable(
     maxSalary: integer("max_salary").notNull(),
     currency: varchar("currency"),
     discloseSalary: boolean("disclose_salary").default(true),
-    searchVector: text("search_vector").generatedAlwaysAs(
+    searchVector: tsvector("search_vector").generatedAlwaysAs(
       () =>
-        sql`to_tsvector('english', coalesce(job_title, '') || ' ' || coalesce(job_description, ''))`,
+        sql`to_tsvector('english', coalesce(job_title,'') || ' ' || coalesce(job_description,''))`,
     ),
     ...timestamps,
   },
@@ -141,7 +147,7 @@ export const socialPost = pgTable(
     profileId: integer("profile_id")
       .notNull()
       .references(() => profile.id, { onDelete: "cascade" }),
-    searchVector: text("search_vector").generatedAlwaysAs(
+    searchVector: tsvector("search_vector").generatedAlwaysAs(
       () => sql`to_tsvector('english', coalesce(post_description, ''))`,
     ),
 

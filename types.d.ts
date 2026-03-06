@@ -31,3 +31,31 @@ type AuthSession = {
     updatedAt: Date | null;
   } | null;
 } | null;
+
+type media = "Image" | "Video" | "Article";
+
+type imageType = { file: File; preview: string };
+
+interface ImageUploadProps {
+  setMedia: (mediaType: media | null) => void;
+  setImages: React.Dispatch<React.SetStateAction<imageType[]>>;
+  images: imageType[];
+}
+
+interface AlertDialogWarningProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  setImages: React.Dispatch<React.SetStateAction<imageType[] | []>>;
+  setPreviewForImage: (image: string | null) => void;
+  setMedia: (mediaType: media | null) => void;
+}
+
+interface createPostActionMediaUpload {
+  type: "image" | "video";
+  url: string;
+}
+
+interface createPostActionProps {
+  content: string;
+  media: createPostActionMediaUpload[];
+}

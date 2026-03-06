@@ -32,6 +32,7 @@ import {
 } from "./ui/select";
 import { signUp } from "@/actions/auth.action";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
   const form = useForm<z.infer<typeof signUpSchema>>({
@@ -44,12 +45,14 @@ const SignUpForm = () => {
       role: "person",
     },
   });
+  const router = useRouter();
 
   console.log(form);
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
     try {
       await signUp(data);
       toast.success("User successfully signed up");
+      router.push("/");
     } catch (error) {
       toast.error(JSON.stringify(error));
     }
