@@ -30,6 +30,7 @@ export const createPostAction = async (payload: createPostActionProps) => {
         })),
       );
     }
+    return true;
   } catch (error) {
     console.error(error);
   }
